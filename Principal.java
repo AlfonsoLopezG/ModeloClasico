@@ -12,10 +12,10 @@ public class Principal {
 	public static void main(String[] args) {
 		//Variables, vectores y matrices utilizadas.
 		int i,j; //Controladores de ciclos.
-		int Dif=0;//Diferencia para calcular Wt o Idt.
+		int Dif = 0;//Diferencia para calcular Wt o Idt.
 		int M; //Numero total de ordenes a procesar.
 		int N; //Numero total de procesos a realizar en cada orden.
-		int Et; //Media tiempos de llegada de las ordenes.
+		float Et = 0; //Media tiempos de llegada de las ordenes.
 		int At[]; // Registro de tiempos de llegada de las ordenes.
 		int Ts[]; //Tiempo total de cada orden.
 		float Vt[]; //Varianza de los tiempos de proceso.
@@ -121,6 +121,24 @@ public class Principal {
 			}
 		}
 		
+		//Calculando Media de tiempos
+		for(i=0;i<M;i++) {
+			Et+=At[i];
+		}
+		Et/=M;
+		
+		//Calculando varianza entre proceso
+		//Varianza=Sumatoria(Xi-Media)^2 / n-1
+		for(i=0;i<N;i++) {
+			float pobla=0;
+			for(j=0;j<M;j++) {
+				float sum=0;
+				sum = (St[j][i] - Et);
+				pobla+= Math.pow(sum, 2);
+			}
+			Vt[i]=pobla /(M-1);
+		}
+		
 		//Mostrando los tiempos de llegada
 		System.out.println("Tiempos de llegada: ");
 		for(i=0;i<M;i++) {
@@ -168,5 +186,13 @@ public class Principal {
 			System.out.print(Ts[i] +" ");
 		}
 		
+		//Mostrando la media de tiempos de llegada
+		System.out.println("\nMedia de tiempo de llegada entre ordenes: \n" +Et);
+		
+		//Mostrando la matriz con la varianza de tiempos por proceso
+		System.out.println("Varianza de tiempos por proceso: ");
+		for(i=0;i<N;i++) {
+			System.out.println("Proceso " +(i+1)+": " +Vt[i]);
+		}
 	}
 }
